@@ -1,8 +1,10 @@
+import Script from "next/script"
 import { notFound } from "next/navigation"
 import { SiteFooter } from "@/components/site-footer"
 import { SiteHeader } from "@/components/site-header"
 import { SECTION_PAGES, getSectionPageBySlug } from "@/lib/content/section-pages"
 import { EXAMS } from "@/lib/exams"
+import { faqPageSchema, SITE_URL } from "@/lib/seo"
 
 export function generateStaticParams() {
   return SECTION_PAGES.map((page) => ({ slug: page.slug }))
@@ -24,10 +26,20 @@ export default async function SectionPage({ params }: { params: Promise<{ slug: 
   const page = getSectionPageBySlug(slug)
   if (!page) notFound()
 
+  const faqSchema = page.faqs?.length
+    ? faqPageSchema(`${SITE_URL}/section/${page.slug}`, page.faqs)
+    : null
+
   return (
     <div className="flex min-h-screen flex-col">
       <SiteHeader />
       <main className="flex-1">
+        {faqSchema ? (
+          <Script id={`${page.slug}-faq-schema`} type="application/ld+json">
+            {JSON.stringify(faqSchema)}
+          </Script>
+        ) : null}
+
         <section className="border-b border-border bg-secondary/40">
           <div className="mx-auto w-full max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
             <p className="text-sm font-medium text-muted-foreground">Practice section</p>

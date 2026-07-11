@@ -1,6 +1,26 @@
+import Script from "next/script"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { TestFinder } from "@/components/finder/test-finder"
+import { faqPageSchema, SITE_URL } from "@/lib/seo"
+
+const FINDER_FAQS = [
+  {
+    question: "Which admissions test does this tool support?",
+    answer:
+      "This tool covers the current UK admissions tests including LNAT, TMUA, TARA and ELAT, using the latest 2026/2027 guidance.",
+  },
+  {
+    question: "How many questions do I need to answer?",
+    answer:
+      "You answer two quick questions about your course and university preferences, and we suggest the most likely test requirement.",
+  },
+  {
+    question: "Is the recommendation updated for the latest Oxford and UCL changes?",
+    answer:
+      "Yes. The tool reflects the January 2026 reforms such as Oxford moving from TSA to TARA and from MAT to TMUA.",
+  },
+]
 
 export const metadata = {
   title: "Which admissions test do I need? · Clearsit",
@@ -13,6 +33,10 @@ export default function FinderPage() {
     <div className="flex min-h-screen flex-col">
       <SiteHeader />
       <main className="flex-1">
+        <Script id="finder-faq-schema" type="application/ld+json">
+          {JSON.stringify(faqPageSchema(`${SITE_URL}/finder`, FINDER_FAQS))}
+        </Script>
+
         <section className="border-b border-border bg-secondary/40">
           <div className="mx-auto w-full max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
             <p className="text-sm font-medium text-muted-foreground">

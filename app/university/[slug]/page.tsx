@@ -1,8 +1,10 @@
+import Script from "next/script"
 import { notFound } from "next/navigation"
 import { SiteFooter } from "@/components/site-footer"
 import { SiteHeader } from "@/components/site-header"
 import { UNIVERSITY_PAGES, getUniversityPageBySlug } from "@/lib/content/university-pages"
 import { EXAMS } from "@/lib/exams"
+import { educationalCredentialSchema } from "@/lib/seo"
 
 export function generateStaticParams() {
   return UNIVERSITY_PAGES.map((p) => ({ slug: p.slug }))
@@ -25,11 +27,18 @@ export default async function UniversityPage({ params }: { params: Promise<{ slu
   if (!page) notFound()
 
   const exam = page.examId ? EXAMS[page.examId as keyof typeof EXAMS] : null
+  const schema = exam ? educationalCredentialSchema(exam) : null
 
   return (
     <div className="flex min-h-screen flex-col">
       <SiteHeader />
       <main className="flex-1">
+        {schema ? (
+          <Script id={`${page.slug}-exam-schema`} type="application/ld+json">
+            {JSON.stringify(schema)}
+          </Script>
+        ) : null}
+
         <section className="border-b border-border bg-secondary/40">
           <div className="mx-auto w-full max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
             <p className="text-sm font-medium text-muted-foreground">University requirement</p>
