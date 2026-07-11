@@ -111,7 +111,7 @@ export function TestRunner({
     } catch {
       /* sessionStorage unavailable — results page will fall back to a sample */
     }
-    router.push(`/results/${attemptId}`)
+    router.push(`/results/${attemptId}?submitted=true`)
   }, [exam.id, exam.durationMinutes, answers, flagged, secondsLeft, router])
 
   // Countdown timer

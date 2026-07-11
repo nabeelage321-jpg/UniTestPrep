@@ -54,7 +54,7 @@ export function SiteHeader() {
         </nav>
 
         <div className="hidden md:block">
-          <Button size="lg" render={<Link href="/which-test-do-i-need" />}>
+          <Button size="lg" nativeButton={false} render={<Link href="/which-test-do-i-need" />}>
             Start free test
           </Button>
         </div>
@@ -98,6 +98,7 @@ export function SiteHeader() {
             </Link>
             <Button
               size="lg"
+              nativeButton={false}
               className="mt-2"
               render={<Link href="/which-test-do-i-need" onClick={() => setOpen(false)} />}
             >

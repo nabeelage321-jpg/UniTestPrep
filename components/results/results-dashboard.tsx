@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
+import { useSearchParams } from "next/navigation"
 import {
   ArrowUpRight,
   Clock,
@@ -67,6 +68,51 @@ export function ResultsDashboard({
   }, [attemptId, examId])
 
   const exam = EXAMS[examId]
+  const searchParams = useSearchParams()
+  const submitted = searchParams.get("submitted") === "true"
+  const [email, setEmail] = useState("")
+  const [emailStatus, setEmailStatus] = useState<"idle" | "saving" | "saved" | "error">("idle")
+  const [emailError, setEmailError] = useState<string | null>(null)
+
+  async function saveLead() {
+    setEmailError(null)
+    const trimmedEmail = email.trim()
+    if (!trimmedEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
+      setEmailError("Enter a valid email address.")
+      return
+    }
+
+    setEmailStatus("saving")
+    try {
+      const response = await fetch("/api/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: trimmedEmail,
+          examId,
+          examName: exam.name,
+          score: diagnostic?.bandScore,
+          overallAccuracy: diagnostic?.overallAccuracy,
+          bandLabel: diagnostic?.bandLabel,
+          attemptId,
+          timeSpent: diagnostic?.timeSpent,
+          attemptedAt: Date.now(),
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to save the lead")
+      }
+      setEmailStatus("saved")
+    } catch (error) {
+      setEmailStatus("error")
+      setEmailError(
+        error instanceof Error
+          ? error.message
+          : "Unable to save your email right now. Please try again."
+      )
+    }
+  }
 
   if (!diagnostic) {
     return (
@@ -112,6 +158,14 @@ export function ResultsDashboard({
                     ? "This is a sample of the report you'll get after a real mock. Start a test to generate your own."
                     : "Here's exactly where you stand, section by section, with every question ready to review."}
                 </p>
+                {submitted && !isSample && (
+                  <div className="mt-3 rounded-2xl border border-primary/30 bg-primary/10 px-4 py-3 text-sm text-primary-foreground">
+                    Success! Your answers have been submitted and your score is now ready to review.
+                  </div>
+                )}
+                <p className="mt-3 text-sm text-muted-foreground">
+                  This page is powered by browser sessionStorage right now. The result link may not work if opened in a new browser or after the session ends.
+                </p>
               </div>
               <div className="flex shrink-0 gap-3">
                 <Button variant="outline" render={<Link href="/" />}>
@@ -153,6 +207,50 @@ export function ResultsDashboard({
               hint={`${timePct}% of the allowance`}
             />
           </div>
+
+          <Card className="mt-6 border border-border bg-background">
+            <CardHeader>
+              <CardTitle>Save your score</CardTitle>
+              <CardDescription>
+                Capture your email and save this result for follow-up support.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="grid gap-4 sm:grid-cols-[1fr_auto]">
+              <div className="grid gap-2">
+                <label className="text-sm font-medium text-foreground" htmlFor="result-email">
+                  Email address
+                </label>
+                <input
+                  id="result-email"
+                  type="email"
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                  placeholder="you@example.com"
+                  className="rounded-lg border border-border bg-background px-4 py-3 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+                />
+                {emailError && (
+                  <p className="text-sm text-destructive">{emailError}</p>
+                )}
+                {emailStatus === "saved" && (
+                  <p className="text-sm text-primary">
+                    Saved. We’ve recorded your email and score for follow-up.
+                  </p>
+                )}
+              </div>
+              <div className="flex items-end">
+                <Button
+                  onClick={saveLead}
+                  disabled={emailStatus === "saving" || emailStatus === "saved"}
+                >
+                  {emailStatus === "saving"
+                    ? "Saving…"
+                    : emailStatus === "saved"
+                    ? "Saved"
+                    : "Save my score"}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
 
           {/* Chart + insights */}
           <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_1.1fr]">
