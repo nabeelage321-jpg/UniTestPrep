@@ -24,6 +24,9 @@ export const metadata: Metadata = {
   description:
     'Free, realistic practice tests for UK university admissions exams: LNAT, TMUA, TARA and ELAT. Walk into test day calm, prepared, and sure of yourself.',
   generator: 'v0.app',
+   verification: {
+    google: "nrQfXDbfR7qFDIjiFgoF47jMFAa8myV4cVgzyKtlU64",
+  },
   keywords: [
     'LNAT practice',
     'TMUA practice',
@@ -31,9 +34,8 @@ export const metadata: Metadata = {
     'ELAT practice',
     'Oxford admissions test',
     'Cambridge admissions test',
-  ],
-}
-
+    ],
+};
 export const viewport: Viewport = {
   colorScheme: 'light',
   themeColor: '#1c2a4a',
