@@ -19,7 +19,7 @@ const fraunces = Fraunces({
 export const metadata: Metadata = {
   title: {
     default: 'Clearsit — Free UK admissions test practice (LNAT, TMUA, TARA, ELAT)',
-    template: '%s · Clearsit',
+    template: '%s',
   },
   description:
     'Free, realistic practice tests for UK university admissions exams: LNAT, TMUA, TARA and ELAT. Walk into test day calm, prepared, and sure of yourself.',

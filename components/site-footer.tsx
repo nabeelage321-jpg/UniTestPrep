@@ -2,20 +2,15 @@ import Link from "next/link"
 
 import { Logo } from "@/components/logo"
 import { EXAM_LIST } from "@/lib/exams"
-
-const universities = [
-  "University of Oxford",
-  "University of Cambridge",
-  "Imperial College London",
-  "LSE",
-  "UCL",
-]
+import { SECTION_PAGES } from "@/lib/content/section-pages"
+import { SUPPORTING_PAGES } from "@/lib/content/supporting-pages"
+import { UNIVERSITY_PAGES } from "@/lib/content/university-pages"
 
 export function SiteFooter() {
   return (
     <footer className="border-t border-border bg-secondary/40">
       <div className="mx-auto w-full max-w-6xl px-4 py-12 sm:px-6">
-        <div className="grid gap-10 md:grid-cols-[1.5fr_1fr_1fr]">
+        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr_1fr]">
           <div className="max-w-sm">
             <Logo />
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
@@ -50,15 +45,58 @@ export function SiteFooter() {
           </div>
 
           <div>
-            <h2 className="text-sm font-semibold text-foreground">
-              Built for applicants to
-            </h2>
+            <h2 className="text-sm font-semibold text-foreground">Section guides</h2>
             <ul className="mt-4 flex flex-col gap-2.5">
-              {universities.map((u) => (
-                <li key={u} className="text-sm text-muted-foreground">
-                  {u}
+              {SECTION_PAGES.map((page) => (
+                <li key={page.slug}>
+                  <Link
+                    href={`/section/${page.slug}`}
+                    className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                  >
+                    {page.title}
+                  </Link>
                 </li>
               ))}
+            </ul>
+          </div>
+
+          <div>
+            <h2 className="text-sm font-semibold text-foreground">Universities</h2>
+            <ul className="mt-4 flex flex-col gap-2.5">
+              {UNIVERSITY_PAGES.map((page) => (
+                <li key={page.slug}>
+                  <Link
+                    href={`/university/${page.slug}`}
+                    className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                  >
+                    {page.universityName} — {page.courseName}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h2 className="text-sm font-semibold text-foreground">Applicant guides</h2>
+            <ul className="mt-4 flex flex-col gap-2.5">
+              {SUPPORTING_PAGES.map((page) => (
+                <li key={page.slug}>
+                  <Link
+                    href={`/guide/${page.slug}`}
+                    className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                  >
+                    {page.title}
+                  </Link>
+                </li>
+              ))}
+              <li>
+                <Link
+                  href="/blog"
+                  className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  Blog
+                </Link>
+              </li>
             </ul>
           </div>
         </div>

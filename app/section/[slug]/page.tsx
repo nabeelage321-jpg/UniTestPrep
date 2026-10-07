@@ -3,6 +3,8 @@ import { notFound } from "next/navigation"
 import { SiteFooter } from "@/components/site-footer"
 import { SiteHeader } from "@/components/site-header"
 import { SECTION_PAGES, getSectionPageBySlug } from "@/lib/content/section-pages"
+import { SUPPORTING_PAGES } from "@/lib/content/supporting-pages"
+import { UNIVERSITY_PAGES } from "@/lib/content/university-pages"
 import { EXAMS } from "@/lib/exams"
 import { faqPageSchema, SITE_URL } from "@/lib/seo"
 
@@ -104,6 +106,64 @@ export default async function SectionPage({ params }: { params: Promise<{ slug: 
               </div>
             </div>
           )}
+          {(() => {
+            const examKey = page.slug.split("-")[0]
+            const siblings = SECTION_PAGES.filter(
+              (p) => p.slug !== page.slug && p.slug.startsWith(examKey),
+            ).slice(0, 6)
+            const unis = UNIVERSITY_PAGES.filter(
+              (u) => u.examId && page.relatedExamIds?.includes(u.examId),
+            ).slice(0, 5)
+            const guides = SUPPORTING_PAGES.slice(0, 3)
+            if (siblings.length === 0 && unis.length === 0) return null
+            return (
+              <div className="mt-16 rounded-3xl border border-border bg-secondary/10 p-8">
+                <h2 className="text-2xl font-semibold text-foreground">Keep preparing</h2>
+                <div className="mt-4 grid gap-8 md:grid-cols-3">
+                  {siblings.length > 0 && (
+                    <div>
+                      <h3 className="text-sm font-semibold text-foreground">More section guides</h3>
+                      <ul className="mt-3 flex flex-col gap-2">
+                        {siblings.map((p) => (
+                          <li key={p.slug}>
+                            <a href={`/section/${p.slug}`} className="text-sm text-muted-foreground transition hover:text-foreground">
+                              {p.title}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  {unis.length > 0 && (
+                    <div>
+                      <h3 className="text-sm font-semibold text-foreground">University requirements</h3>
+                      <ul className="mt-3 flex flex-col gap-2">
+                        {unis.map((u) => (
+                          <li key={u.slug}>
+                            <a href={`/university/${u.slug}`} className="text-sm text-muted-foreground transition hover:text-foreground">
+                              {u.universityName} — {u.courseName}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  <div>
+                    <h3 className="text-sm font-semibold text-foreground">Applicant guides</h3>
+                    <ul className="mt-3 flex flex-col gap-2">
+                      {guides.map((g) => (
+                        <li key={g.slug}>
+                          <a href={`/guide/${g.slug}`} className="text-sm text-muted-foreground transition hover:text-foreground">
+                            {g.title}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            )
+          })()}
         </section>
       </main>
       <SiteFooter />
