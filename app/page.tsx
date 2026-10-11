@@ -7,6 +7,7 @@ import { OverhaulSection } from "@/components/home/overhaul-section"
 import { organizationSchema } from "@/lib/seo"
 
 export const metadata = {
+  alternates: { canonical: "/" },
   title: "Clearsit — UK university admissions test guidance",
   description:
     "Find the right UK university admissions test and prepare with practice, guides, and up-to-date exam advice.",

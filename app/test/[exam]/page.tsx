@@ -28,6 +28,7 @@ export async function generateMetadata({
   const { exam } = await params
   if (!isExamId(exam)) return { title: "Practice test · Clearsit" }
   return {
+    alternates: { canonical: `/test/${exam}` },
     title: `${EXAMS[exam].name} practice mock · Clearsit`,
     description: EXAMS[exam].oneLiner,
   }

@@ -12,6 +12,7 @@ export function generateMetadata({ params }: { params: Promise<{ slug: string }>
     const page = getSupportingPageBySlug(slug)
     if (!page) return { title: "Guide · Clearsit" }
     return {
+      alternates: { canonical: `/guide/${slug}` },
       title: `${page.title} · Clearsit`,
       description: page.intro,
     }

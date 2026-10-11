@@ -17,6 +17,7 @@ export function generateMetadata({ params }: { params: Promise<{ slug: string }>
     const page = getSectionPageBySlug(slug)
     if (!page) return { title: "Practice section · Clearsit" }
     return {
+      alternates: { canonical: `/section/${slug}` },
       title: `${page.title} · Clearsit`,
       description: page.description ?? page.intro,
     }

@@ -17,6 +17,7 @@ const fraunces = Fraunces({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://clearsit.vercel.app'),
   title: {
     default: 'Clearsit — Free UK admissions test practice (LNAT, TMUA, TARA, ELAT)',
     template: '%s',

@@ -23,6 +23,7 @@ const FINDER_FAQS = [
 ]
 
 export const metadata = {
+  alternates: { canonical: "/finder" },
   title: "Which admissions test do I need? · Clearsit",
   description:
     "Answer two quick questions to find out exactly which UK university admissions test your course requires — including recent changes like the TSA becoming the TARA.",
